@@ -1,0 +1,166 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <h2>Responsáveis Financeiros</h2>
+    </div>
+    <div class="col-md-6 text-end">
+      <button class="btn btn-primary" (click)="novoResponsavel()">
+        <i class="bi bi-plus-circle me-2"></i>Novo Responsável
+      </button>
+    </div>
+  </div>
+
+  @if (erro) {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ erro }}
+      <button type="button" class="btn-close" (click)="erro = null"></button>
+    </div>
+  }
+
+  @if (carregando) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+      <p class="mt-2">Carregando responsáveis...</p>
+    </div>
+  } @else {
+    <div class="card">
+      <div class="card-body">
+        @if (responsaveis.length === 0) {
+          <div class="text-center py-5">
+            <i class="bi bi-inbox fs-1 text-muted"></i>
+            <p class="mt-3 text-muted">Nenhum responsável financeiro cadastrado</p>
+            <button class="btn btn-primary" (click)="novoResponsavel()">Cadastrar Primeiro Responsável</button>
+          </div>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>CPF</th>
+                  <th>Email</th>
+                  <th>Telefone</th>
+                  <th>Celular</th>
+                  <th>Cidade/UF</th>
+                  <th>Status</th>
+                  <th class="text-end">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (responsavel of responsaveis; track responsavel.idResponsavel) {
+                  <tr>
+                    <td>{{ responsavel.nome }}</td>
+                    <td>{{ responsavel.cpf }}</td>
+                    <td>{{ responsavel.email }}</td>
+                    <td>{{ formatarTelefone(responsavel.telefone) }}</td>
+                    <td>{{ formatarTelefone(responsavel.celular) }}</td>
+                    <td>{{ responsavel.cidade }}/{{ responsavel.estado }}</td>
+                    <td>
+                      @if (responsavel.ativo) {
+                        <span class="badge bg-success">Ativo</span>
+                      } @else {
+                        <span class="badge bg-secondary">Inativo</span>
+                      }
+                    </td>
+                    <td class="text-end">
+                      <div class="btn-group" role="group">
+                        <button class="btn btn-sm btn-outline-primary" (click)="editarResponsavel(responsavel.idResponsavel)" title="Editar">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-info" (click)="verDetalhes(responsavel.idResponsavel)" title="Ver Detalhes">
+                          <i class="bi bi-eye"></i>
+                        </button>
+                        <button (click)="excluirResponsavel(responsavel.idResponsavel)" class="btn btn-sm btn-outline-danger" title="Excluir">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Modal de Detalhes -->
+  @if (mostrarModal && responsavelDetalhes) {
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Detalhes do Responsável Financeiro</h5>
+            <button type="button" class="btn-close" (click)="fecharModal()"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <strong>Nome:</strong>
+                <p>{{ responsavelDetalhes.nome }}</p>
+              </div>
+              <div class="col-md-3">
+                <strong>CPF:</strong>
+                <p>{{ responsavelDetalhes.cpf }}</p>
+              </div>
+              <div class="col-md-3">
+                <strong>RG:</strong>
+                <p>{{ responsavelDetalhes.rg || '-' }}</p>
+              </div>
+              <div class="col-md-6">
+                <strong>Data de Nascimento:</strong>
+                <p>{{ formatarData(responsavelDetalhes.dataNascimento) }}</p>
+              </div>
+              <div class="col-md-6">
+                <strong>Email:</strong>
+                <p>{{ responsavelDetalhes.email }}</p>
+              </div>
+              <div class="col-md-6">
+                <strong>Telefone:</strong>
+                <p>{{ responsavelDetalhes.telefone }}</p>
+              </div>
+              <div class="col-md-6">
+                <strong>Celular:</strong>
+                <p>{{ responsavelDetalhes.celular }}</p>
+              </div>
+              <div class="col-12">
+                <strong>Endereço:</strong>
+                <p>{{ responsavelDetalhes.logradouro }}, {{ responsavelDetalhes.numero }}
+                  @if (responsavelDetalhes.complemento) {
+                    - {{ responsavelDetalhes.complemento }}
+                  }
+                  <br>{{ responsavelDetalhes.bairro }} - {{ responsavelDetalhes.cidade }}/{{ responsavelDetalhes.estado }}
+                  <br>CEP: {{ responsavelDetalhes.cep }}
+                </p>
+              </div>
+              <div class="col-md-6">
+                <strong>Data de Cadastro:</strong>
+                <p>{{ formatarData(responsavelDetalhes.dataCadastro) }}</p>
+              </div>
+              <div class="col-md-6">
+                <strong>Status:</strong>
+                <p>
+                  @if (responsavelDetalhes.ativo) {
+                    <span class="badge bg-success">Ativo</span>
+                  } @else {
+                    <span class="badge bg-secondary">Inativo</span>
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="fecharModal()">Fechar</button>
+            <button type="button" class="btn btn-primary" (click)="editarResponsavel(responsavelDetalhes.idResponsavel); fecharModal()">
+              <i class="bi bi-pencil me-2"></i>Editar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

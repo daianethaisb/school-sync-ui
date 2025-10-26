@@ -1,0 +1,116 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="mb-3">Dashboard</h2>
+      <p class="text-muted">Bem-vindo ao SchoolSync - Sistema de Gerenciamento Escolar</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-estatisticas-dashboard></app-estatisticas-dashboard>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">
+            <i class="bi bi-lightning-fill me-2"></i>
+            Ações Rápidas
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="list-group list-group-flush">
+            <a routerLink="/alunos/novo" class="list-group-item list-group-item-action d-flex align-items-center">
+              <i class="bi bi-person-plus-fill text-primary me-3 fs-5"></i>
+              <div>
+                <strong>Cadastrar Novo Aluno</strong>
+                <p class="mb-0 text-muted small">Adicionar aluno ao sistema</p>
+              </div>
+            </a>
+            <a routerLink="/matriculas/nova" class="list-group-item list-group-item-action d-flex align-items-center">
+              <i class="bi bi-card-checklist text-success me-3 fs-5"></i>
+              <div>
+                <strong>Nova Matrícula</strong>
+                <p class="mb-0 text-muted small">Matricular aluno em turma</p>
+              </div>
+            </a>
+            <a routerLink="/notas" class="list-group-item list-group-item-action d-flex align-items-center">
+              <i class="bi bi-clipboard-data text-warning me-3 fs-5"></i>
+              <div>
+                <strong>Lançar Notas</strong>
+                <p class="mb-0 text-muted small">Registrar avaliações</p>
+              </div>
+            </a>
+            <a routerLink="/turmas" class="list-group-item list-group-item-action d-flex align-items-center">
+              <i class="bi bi-building text-info me-3 fs-5"></i>
+              <div>
+                <strong>Gerenciar Turmas</strong>
+                <p class="mb-0 text-muted small">Visualizar e editar turmas</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+          <h5 class="mb-0">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            Informações do Sistema
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <h6 class="text-muted mb-2">
+              <i class="bi bi-app-indicator text-primary me-2"></i>
+              Sistema
+            </h6>
+            <p class="mb-0"><strong>SchoolSync</strong> - Versão 1.0.0</p>
+          </div>
+          
+          <div class="mb-3">
+            <h6 class="text-muted mb-2">
+              <i class="bi bi-building text-success me-2"></i>
+              Desenvolvido para
+            </h6>
+            <p class="mb-0">Gestão Escolar Completa e Eficiente</p>
+          </div>
+          
+          <div>
+            <h6 class="text-muted mb-2">
+              <i class="bi bi-list-check text-warning me-2"></i>
+              Funcionalidades Principais
+            </h6>
+            <ul class="list-unstyled mb-0">
+              <li class="mb-1">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Gestão de Alunos e Responsáveis
+              </li>
+              <li class="mb-1">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Controle de Turmas e Matrículas
+              </li>
+              <li class="mb-1">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Gerenciamento de Disciplinas
+              </li>
+              <li class="mb-1">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Lançamento e Consulta de Notas
+              </li>
+              <li class="mb-0">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Relatórios e Estatísticas em Tempo Real
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <h2>{{ isEdicao ? 'Editar Disciplina' : 'Nova Disciplina' }}</h2>
+    </div>
+  </div>
+
+  @if (erro) {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ erro }}
+      <button type="button" class="btn-close" (click)="erro = null"></button>
+    </div>
+  }
+
+  @if (carregando) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+      <p class="mt-2">Carregando dados da disciplina...</p>
+    </div>
+  } @else {
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="formulario" (ngSubmit)="salvar()">
+          <div class="row">
+            <!-- Nome da Disciplina -->
+            <div class="col-md-6 mb-3">
+              <label for="nome" class="form-label">Nome da Disciplina <span class="text-danger">*</span></label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="nome" 
+                formControlName="nome"
+                [class.is-invalid]="getCampoErro('nome')"
+                placeholder="Ex: Matemática">
+              @if (getCampoErro('nome')) {
+                <div class="invalid-feedback">{{ getCampoErro('nome') }}</div>
+              }
+            </div>
+
+            <!-- Código -->
+            <div class="col-md-3 mb-3">
+              <label for="codigo" class="form-label">Código <span class="text-danger">*</span></label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="codigo" 
+                formControlName="codigo"
+                [class.is-invalid]="getCampoErro('codigo')"
+                placeholder="Ex: MAT001">
+              @if (getCampoErro('codigo')) {
+                <div class="invalid-feedback">{{ getCampoErro('codigo') }}</div>
+              }
+            </div>
+
+            <!-- Carga Horária -->
+            <div class="col-md-3 mb-3">
+              <label for="cargaHoraria" class="form-label">Carga Horária (h) <span class="text-danger">*</span></label>
+              <input 
+                type="number" 
+                class="form-control" 
+                id="cargaHoraria" 
+                formControlName="cargaHoraria"
+                [class.is-invalid]="getCampoErro('cargaHoraria')"
+                placeholder="60"
+                min="1"
+                max="500">
+              @if (getCampoErro('cargaHoraria')) {
+                <div class="invalid-feedback">{{ getCampoErro('cargaHoraria') }}</div>
+              }
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Descrição -->
+            <div class="col-md-12 mb-3">
+              <label for="descricao" class="form-label">Descrição</label>
+              <textarea 
+                class="form-control" 
+                id="descricao" 
+                formControlName="descricao"
+                rows="4"
+                placeholder="Descrição da disciplina (opcional)"></textarea>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="button" class="btn btn-secondary" (click)="cancelar()" [disabled]="salvando">
+              <i class="bi bi-x-circle me-2"></i>Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="salvando || formulario.invalid">
+              @if (salvando) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              } @else {
+                <i class="bi bi-check-circle me-2"></i>
+              }
+              {{ isEdicao ? 'Atualizar' : 'Cadastrar' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>

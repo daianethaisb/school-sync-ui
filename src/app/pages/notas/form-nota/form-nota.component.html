@@ -1,0 +1,197 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <h2>{{ isEdicao ? 'Editar Nota' : 'Lançar Nova Nota' }}</h2>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/notas">Notas</a></li>
+          <li class="breadcrumb-item active">{{ isEdicao ? 'Editar' : 'Nova' }}</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  @if (erro) {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ erro }}
+      <button type="button" class="btn-close" (click)="erro = null"></button>
+    </div>
+  }
+
+  @if (carregando) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+      <p class="mt-2">Carregando dados...</p>
+    </div>
+  } @else {
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="formulario" (ngSubmit)="salvar()">
+          <div class="row">
+            <!-- Matrícula -->
+            <div class="col-md-6 mb-3">
+              <label for="idMatricula" class="form-label">Matrícula *</label>
+              <select 
+                id="idMatricula" 
+                class="form-select" 
+                formControlName="idMatricula"
+                [class.is-invalid]="getCampoErro('idMatricula')">
+                <option value="">Selecione uma matrícula</option>
+                @for (matricula of matriculas; track matricula.idMatricula) {
+                  <option [value]="matricula.idMatricula">
+                    {{ matricula.numeroMatricula }} - {{ matricula.nomeAluno }} ({{ matricula.nomeTurma }})
+                  </option>
+                }
+              </select>
+              @if (getCampoErro('idMatricula')) {
+                <div class="invalid-feedback">{{ getCampoErro('idMatricula') }}</div>
+              }
+            </div>
+
+            <!-- Disciplina -->
+            <div class="col-md-6 mb-3">
+              <label for="idDisciplina" class="form-label">Disciplina *</label>
+              <select 
+                id="idDisciplina" 
+                class="form-select" 
+                formControlName="idDisciplina"
+                [class.is-invalid]="getCampoErro('idDisciplina')">
+                <option value="">Selecione uma disciplina</option>
+                @for (disciplina of disciplinas; track disciplina.idDisciplina) {
+                  <option [value]="disciplina.idDisciplina">
+                    {{ disciplina.nome }} ({{ disciplina.codigo }})
+                  </option>
+                }
+              </select>
+              @if (getCampoErro('idDisciplina')) {
+                <div class="invalid-feedback">{{ getCampoErro('idDisciplina') }}</div>
+              }
+            </div>
+
+            <!-- Tipo de Avaliação -->
+            <div class="col-md-4 mb-3">
+              <label for="tipoAvaliacao" class="form-label">Tipo de Avaliação *</label>
+              <select 
+                id="tipoAvaliacao" 
+                class="form-select" 
+                formControlName="tipoAvaliacao"
+                [class.is-invalid]="getCampoErro('tipoAvaliacao')">
+                <option value="">Selecione o tipo</option>
+                @for (tipo of tipoAvaliacaoOptions; track tipo.value) {
+                  <option [value]="tipo.value">{{ tipo.label }}</option>
+                }
+              </select>
+              @if (getCampoErro('tipoAvaliacao')) {
+                <div class="invalid-feedback">{{ getCampoErro('tipoAvaliacao') }}</div>
+              }
+            </div>
+
+            <!-- Bimestre -->
+            <div class="col-md-4 mb-3">
+              <label for="bimestre" class="form-label">Bimestre *</label>
+              <select 
+                id="bimestre" 
+                class="form-select" 
+                formControlName="bimestre"
+                [class.is-invalid]="getCampoErro('bimestre')">
+                <option value="">Selecione o bimestre</option>
+                @for (bim of bimestreOptions; track bim.value) {
+                  <option [value]="bim.value">{{ bim.label }}</option>
+                }
+              </select>
+              @if (getCampoErro('bimestre')) {
+                <div class="invalid-feedback">{{ getCampoErro('bimestre') }}</div>
+              }
+            </div>
+
+            <!-- Data da Avaliação -->
+            <div class="col-md-4 mb-3">
+              <label for="dataAvaliacao" class="form-label">Data da Avaliação *</label>
+              <input 
+                type="date" 
+                id="dataAvaliacao" 
+                class="form-control" 
+                formControlName="dataAvaliacao"
+                [class.is-invalid]="getCampoErro('dataAvaliacao')">
+              @if (getCampoErro('dataAvaliacao')) {
+                <div class="invalid-feedback">{{ getCampoErro('dataAvaliacao') }}</div>
+              }
+            </div>
+
+            <!-- Nota -->
+            <div class="col-md-6 mb-3">
+              <label for="notaValor" class="form-label">Nota *</label>
+              <input 
+                type="number" 
+                id="notaValor" 
+                class="form-control" 
+                formControlName="notaValor"
+                step="0.1"
+                min="0"
+                max="10"
+                placeholder="0.0 a 10.0"
+                [class.is-invalid]="getCampoErro('notaValor')">
+              @if (getCampoErro('notaValor')) {
+                <div class="invalid-feedback">{{ getCampoErro('notaValor') }}</div>
+              }
+              <div class="form-text">Nota de 0 a 10</div>
+            </div>
+
+            <!-- Peso -->
+            <div class="col-md-6 mb-3">
+              <label for="peso" class="form-label">Peso *</label>
+              <input 
+                type="number" 
+                id="peso" 
+                class="form-control" 
+                formControlName="peso"
+                step="0.1"
+                min="0.1"
+                placeholder="Ex: 3.0"
+                [class.is-invalid]="getCampoErro('peso')">
+              @if (getCampoErro('peso')) {
+                <div class="invalid-feedback">{{ getCampoErro('peso') }}</div>
+              }
+              <div class="form-text">Peso da avaliação no cálculo da média</div>
+            </div>
+
+            <!-- Observações -->
+            <div class="col-md-12 mb-3">
+              <label for="observacoes" class="form-label">Observações</label>
+              <textarea 
+                id="observacoes" 
+                class="form-control" 
+                formControlName="observacoes"
+                rows="3"
+                placeholder="Observações sobre a avaliação..."></textarea>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 mt-4">
+            <button 
+              type="button" 
+              class="btn btn-secondary" 
+              (click)="cancelar()"
+              [disabled]="salvando">
+              <i class="bi bi-x-circle me-2"></i>Cancelar
+            </button>
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="salvando || formulario.invalid">
+              @if (salvando) {
+                <span class="spinner-border spinner-border-sm me-2"></span>
+              } @else {
+                <i class="bi bi-check-circle me-2"></i>
+              }
+              {{ isEdicao ? 'Atualizar' : 'Lançar Nota' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>

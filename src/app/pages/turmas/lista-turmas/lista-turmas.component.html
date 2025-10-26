@@ -1,0 +1,131 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <h2>Turmas</h2>
+    </div>
+    <div class="col-md-6 text-end">
+      <a routerLink="/turmas/novo" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-2"></i>Nova Turma
+      </a>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-funnel"></i></span>
+        <select class="form-select" (change)="filtrarPorAno(+$any($event.target).value)" [value]="anoSelecionado || ''">
+          <option value="">Todos os anos</option>
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </select>
+        @if (anoSelecionado) {
+          <button class="btn btn-outline-secondary" (click)="limparFiltro()">
+            <i class="bi bi-x"></i>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (erro) {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ erro }}
+      <button type="button" class="btn-close" (click)="erro = null"></button>
+    </div>
+  }
+
+  @if (carregando) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+      <p class="mt-2">Carregando turmas...</p>
+    </div>
+  } @else {
+    <div class="card">
+      <div class="card-body">
+        @if (turmas.length === 0) {
+          <div class="text-center py-5">
+            <i class="bi bi-inbox fs-1 text-muted"></i>
+            <p class="mt-3 text-muted">Nenhuma turma cadastrada</p>
+            <a routerLink="/turmas/novo" class="btn btn-primary">Cadastrar Primeira Turma</a>
+          </div>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Ano Letivo</th>
+                  <th>Série</th>
+                  <th>Turno</th>
+                  <th>Sala</th>
+                  <th>Capacidade</th>
+                  <th>Vagas</th>
+                  <th>Período</th>
+                  <th>Status</th>
+                  <th class="text-end">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (turma of turmas; track turma.idTurma) {
+                  <tr>
+                    <td><strong>{{ turma.nome }}</strong></td>
+                    <td>{{ turma.anoLetivo }}</td>
+                    <td>{{ turma.serie }}</td>
+                    <td>{{ turma.turno }}</td>
+                    <td>{{ turma.sala }}</td>
+                    <td>{{ turma.capacidadeMaxima }}</td>
+                    <td>
+                      <span [class.text-danger]="turma.vagasDisponiveis === 0" 
+                            [class.text-warning]="turma.vagasDisponiveis > 0 && turma.vagasDisponiveis <= 5">
+                        {{ turma.vagasDisponiveis }}
+                      </span>
+                    </td>
+                    <td class="small">
+                      {{ formatarData(turma.dataInicio) }} a {{ formatarData(turma.dataFim) }}
+                    </td>
+                    <td>
+                      @if (turma.ativo) {
+                        <span class="badge bg-success">Ativa</span>
+                      } @else {
+                        <span class="badge bg-secondary">Inativa</span>
+                      }
+                    </td>
+                    <td class="text-end">
+                      <div class="btn-group" role="group">
+                        <a [routerLink]="['/turmas/editar', turma.idTurma]" class="btn btn-sm btn-outline-primary" title="Editar">
+                          <i class="bi bi-pencil"></i>
+                        </a>
+                        <button 
+                          class="btn btn-sm btn-outline-info" 
+                          title="Ver Disciplinas"
+                          (click)="abrirModalDisciplinas(turma)">
+                          <i class="bi bi-journal-text"></i>
+                        </button>
+                        <button (click)="excluirTurma(turma.idTurma)" class="btn btn-sm btn-outline-danger" title="Excluir">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Modal de Disciplinas -->
+@if (turmaSelecionada) {
+  <app-modal-turma-disciplinas 
+    [turma]="turmaSelecionada"
+    (disciplinaVinculada)="onDisciplinaVinculada()">
+  </app-modal-turma-disciplinas>
+}

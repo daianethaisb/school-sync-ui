@@ -1,0 +1,89 @@
+@if (exibir && matricula) {
+  <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-card-text me-2"></i>
+            Detalhes da Matrícula
+          </h5>
+          <button type="button" class="btn-close" (click)="fecharModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <!-- Número da Matrícula -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label text-muted small">Número da Matrícula</label>
+              <div class="fw-bold">
+                <code class="fs-5">{{ matricula.numeroMatricula }}</code>
+              </div>
+            </div>
+
+            <!-- Situação -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label text-muted small">Situação</label>
+              <div>
+                <span class="badge {{ getSituacaoClass(matricula.situacao) }} fs-6">
+                  {{ matricula.situacao }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Aluno -->
+            <div class="col-md-12 mb-3">
+              <label class="form-label text-muted small">Aluno</label>
+              <div class="fw-bold">{{ matricula.nomeAluno }}</div>
+            </div>
+
+            <!-- Turma -->
+            <div class="col-md-12 mb-3">
+              <label class="form-label text-muted small">Turma</label>
+              <div class="fw-bold">{{ matricula.nomeTurma }}</div>
+            </div>
+
+            <!-- Data da Matrícula -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label text-muted small">Data da Matrícula</label>
+              <div>{{ formatarData(matricula.dataMatricula) }}</div>
+            </div>
+
+            <!-- Data de Cadastro -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label text-muted small">Data de Cadastro</label>
+              <div>{{ formatarData(matricula.dataCadastro) }}</div>
+            </div>
+
+            <!-- Valor da Mensalidade -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label text-muted small">Valor da Mensalidade</label>
+              <div class="fw-bold text-success fs-5">
+                {{ formatarValor(matricula.valorMensalidade) }}
+              </div>
+            </div>
+
+            <!-- Dia do Vencimento -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label text-muted small">Dia do Vencimento</label>
+              <div class="fw-bold">Dia {{ matricula.diaVencimento }}</div>
+            </div>
+
+            <!-- Observações -->
+            @if (matricula.observacoes) {
+              <div class="col-md-12 mb-3">
+                <label class="form-label text-muted small">Observações</label>
+                <div class="alert alert-info mb-0">
+                  {{ matricula.observacoes }}
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="fecharModal()">
+            <i class="bi bi-x-circle me-2"></i>Fechar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,128 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <h2>Notas</h2>
+    </div>
+    <div class="col-md-6 text-end">
+      <a routerLink="/notas/novo" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-2"></i>Lançar Nota
+      </a>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-funnel"></i></span>
+        <select class="form-select" (change)="filtrarPorBimestre(+$any($event.target).value)" [value]="bimestreSelecionado || ''">
+          <option value="">Todos os bimestres</option>
+          <option value="1">1º Bimestre</option>
+          <option value="2">2º Bimestre</option>
+          <option value="3">3º Bimestre</option>
+          <option value="4">4º Bimestre</option>
+        </select>
+        @if (bimestreSelecionado) {
+          <button class="btn btn-outline-secondary" (click)="limparFiltro()">
+            <i class="bi bi-x"></i>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (erro) {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ erro }}
+      <button type="button" class="btn-close" (click)="erro = null"></button>
+    </div>
+  }
+
+  @if (carregando) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+      <p class="mt-2">Carregando notas...</p>
+    </div>
+  } @else {
+    <div class="card">
+      <div class="card-body">
+        @if (notas.length === 0) {
+          <div class="text-center py-5">
+            <i class="bi bi-inbox fs-1 text-muted"></i>
+            <p class="mt-3 text-muted">Nenhuma nota lançada</p>
+            <a routerLink="/notas/novo" class="btn btn-primary">Lançar Primeira Nota</a>
+          </div>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Aluno</th>
+                  <th>Matrícula</th>
+                  <th>Disciplina</th>
+                  <th>Tipo</th>
+                  <th>Bimestre</th>
+                  <th>Nota</th>
+                  <th>Peso</th>
+                  <th>Data Avaliação</th>
+                  <th>Observações</th>
+                  <th class="text-end">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (nota of notas; track nota.idNota) {
+                  <tr>
+                    <td>{{ nota.nomeAluno }}</td>
+                    <td><code>{{ nota.numeroMatricula }}</code></td>
+                    <td>{{ nota.nomeDisciplina }}</td>
+                    <td>
+                      <span class="badge bg-info">{{ formatarTipoAvaliacao(nota.tipoAvaliacao) }}</span>
+                    </td>
+                    <td>{{ nota.bimestre }}º</td>
+                    <td>
+                      <span [class]="getNotaClass(nota.notaValor)">
+                        {{ nota.notaValor.toFixed(1) }}
+                      </span>
+                    </td>
+                    <td>{{ nota.peso.toFixed(1) }}</td>
+                    <td>{{ formatarData(nota.dataAvaliacao) }}</td>
+                    <td>
+                      @if (nota.observacoes) {
+                        <span class="text-muted small" [title]="nota.observacoes">
+                          <i class="bi bi-info-circle me-1"></i>{{ nota.observacoes }}
+                        </span>
+                      } @else {
+                        <span class="text-muted">-</span>
+                      }
+                    </td>
+                    <td class="text-end">
+                      <div class="btn-group" role="group">
+                        <a [routerLink]="['/notas/editar', nota.idNota]" class="btn btn-sm btn-outline-primary" title="Editar">
+                          <i class="bi bi-pencil"></i>
+                        </a>
+                        <button (click)="excluirNota(nota.idNota)" class="btn btn-sm btn-outline-danger" title="Excluir">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mt-3 p-3 bg-light rounded">
+            <h6 class="mb-2">Legenda:</h6>
+            <div class="d-flex gap-3">
+              <span><span class="text-success fw-bold">Verde:</span> Nota ≥ 7.0</span>
+              <span><span class="text-warning fw-bold">Amarelo:</span> 5.0 ≤ Nota < 7.0</span>
+              <span><span class="text-danger fw-bold">Vermelho:</span> Nota < 5.0</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

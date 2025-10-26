@@ -1,0 +1,232 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2>{{ isEdicao ? 'Editar Aluno' : 'Novo Aluno' }}</h2>
+    </div>
+  </div>
+
+  @if (erro) {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ erro }}
+      <button type="button" class="btn-close" (click)="erro = null"></button>
+    </div>
+  }
+
+  @if (carregando) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+    </div>
+  } @else {
+    <form [formGroup]="formulario" (ngSubmit)="salvar()">
+      <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Dados Pessoais</h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="nome" class="form-label">Nome Completo *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="nome" 
+                formControlName="nome"
+                [class.is-invalid]="formulario.get('nome')?.invalid && formulario.get('nome')?.touched">
+              @if (getCampoErro('nome')) {
+                <div class="invalid-feedback">{{ getCampoErro('nome') }}</div>
+              }
+            </div>
+
+            <div class="col-md-3">
+              <label for="cpf" class="form-label">CPF *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="cpf" 
+                formControlName="cpf"
+                [class.is-invalid]="formulario.get('cpf')?.invalid && formulario.get('cpf')?.touched">
+              @if (getCampoErro('cpf')) {
+                <div class="invalid-feedback">{{ getCampoErro('cpf') }}</div>
+              }
+            </div>
+
+            <div class="col-md-3">
+              <label for="rg" class="form-label">RG *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="rg" 
+                formControlName="rg"
+                [class.is-invalid]="formulario.get('rg')?.invalid && formulario.get('rg')?.touched">
+              @if (getCampoErro('rg')) {
+                <div class="invalid-feedback">{{ getCampoErro('rg') }}</div>
+              }
+            </div>
+
+            <div class="col-md-4">
+              <label for="dataNascimento" class="form-label">Data de Nascimento *</label>
+              <input 
+                type="date" 
+                class="form-control" 
+                id="dataNascimento" 
+                formControlName="dataNascimento"
+                [class.is-invalid]="formulario.get('dataNascimento')?.invalid && formulario.get('dataNascimento')?.touched">
+              @if (getCampoErro('dataNascimento')) {
+                <div class="invalid-feedback">{{ getCampoErro('dataNascimento') }}</div>
+              }
+            </div>
+
+            <div class="col-md-4">
+              <label for="sexo" class="form-label">Sexo *</label>
+              <select 
+                class="form-select" 
+                id="sexo" 
+                formControlName="sexo"
+                [class.is-invalid]="formulario.get('sexo')?.invalid && formulario.get('sexo')?.touched">
+                <option value="">Selecione...</option>
+                @for (opcao of sexoOptions; track opcao.value) {
+                  <option [value]="opcao.value">{{ opcao.label }}</option>
+                }
+              </select>
+              @if (getCampoErro('sexo')) {
+                <div class="invalid-feedback">{{ getCampoErro('sexo') }}</div>
+              }
+            </div>
+
+            <div class="col-md-4">
+              <label for="idResponsavelFinanceiro" class="form-label">Responsável Financeiro *</label>
+              <select 
+                class="form-select" 
+                id="idResponsavelFinanceiro" 
+                formControlName="idResponsavelFinanceiro"
+                [class.is-invalid]="formulario.get('idResponsavelFinanceiro')?.invalid && formulario.get('idResponsavelFinanceiro')?.touched">
+                <option value="">Selecione...</option>
+                @for (responsavel of responsaveis; track responsavel.idResponsavel) {
+                  <option [value]="responsavel.idResponsavel">{{ responsavel.nome }}</option>
+                }
+              </select>
+              @if (getCampoErro('idResponsavelFinanceiro')) {
+                <div class="invalid-feedback">{{ getCampoErro('idResponsavelFinanceiro') }}</div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Contato</h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email *</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="email" 
+                formControlName="email"
+                [class.is-invalid]="formulario.get('email')?.invalid && formulario.get('email')?.touched">
+              @if (getCampoErro('email')) {
+                <div class="invalid-feedback">{{ getCampoErro('email') }}</div>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label for="telefone" class="form-label">Telefone *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="telefone" 
+                formControlName="telefone"
+                [class.is-invalid]="formulario.get('telefone')?.invalid && formulario.get('telefone')?.touched">
+              @if (getCampoErro('telefone')) {
+                <div class="invalid-feedback">{{ getCampoErro('telefone') }}</div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Endereço</h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label for="cep" class="form-label">CEP *</label>
+              <input type="text" class="form-control" id="cep" formControlName="cep">
+            </div>
+
+            <div class="col-md-7">
+              <label for="logradouro" class="form-label">Logradouro *</label>
+              <input type="text" class="form-control" id="logradouro" formControlName="logradouro">
+            </div>
+
+            <div class="col-md-2">
+              <label for="numero" class="form-label">Número *</label>
+              <input type="text" class="form-control" id="numero" formControlName="numero">
+            </div>
+
+            <div class="col-md-4">
+              <label for="complemento" class="form-label">Complemento</label>
+              <input type="text" class="form-control" id="complemento" formControlName="complemento">
+            </div>
+
+            <div class="col-md-4">
+              <label for="bairro" class="form-label">Bairro *</label>
+              <input type="text" class="form-control" id="bairro" formControlName="bairro">
+            </div>
+
+            <div class="col-md-3">
+              <label for="cidade" class="form-label">Cidade *</label>
+              <input type="text" class="form-control" id="cidade" formControlName="cidade">
+            </div>
+
+            <div class="col-md-1">
+              <label for="estado" class="form-label">UF *</label>
+              <input type="text" class="form-control" id="estado" formControlName="estado" maxlength="2">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Informações Adicionais</h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <label for="necessidadesEspeciais" class="form-label">Necessidades Especiais</label>
+              <textarea class="form-control" id="necessidadesEspeciais" formControlName="necessidadesEspeciais" rows="3"></textarea>
+            </div>
+
+            <div class="col-12">
+              <label for="observacoes" class="form-label">Observações</label>
+              <textarea class="form-control" id="observacoes" formControlName="observacoes" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mb-4">
+        <button type="button" class="btn btn-secondary" (click)="cancelar()" [disabled]="salvando">
+          <i class="bi bi-x-circle me-2"></i>Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="salvando">
+          @if (salvando) {
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          } @else {
+            <i class="bi bi-check-circle me-2"></i>
+          }
+          {{ isEdicao ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  }
+</div>
