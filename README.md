@@ -124,6 +124,16 @@ SchoolSync.API/
    - Facilita testes com mocks
    - Separação entre domínio e persistência
 
+​💾 Banco de Dados em Memória (Entity Framework Core)
+
+​Este projeto utiliza o Banco de Dados em Memória (In-Memory Database) do Entity Framework Core. Esta escolha técnica não visa a persistência de longo prazo, mas sim focar integralmente na arquitetura e no desenvolvimento rápido.
+​Benefícios Principais:
+​Desacoplamento Arquitetural (DDD): Permite validar a arquitetura em camadas (DDD), garantindo que a lógica de negócio seja independente de qualquer provedor de banco de dados real.
+​Setup Rápido: Elimina a necessidade de instalação e configuração de um servidor SQL externo, acelerando o desenvolvimento e o teste inicial (sem connection strings ou migrations).
+​Ambiente de Teste Limpo: Garante que a aplicação sempre inicie com um estado de dados limpo, ideal para testes de integração e demonstrações.
+
+​Nota: Ao encerrar o servidor da API (dotnet run), todos os dados cadastrados são resetados, pois a persistência é apenas na memória RAM.
+
 
 ## 🔌 Integração com a API
 
